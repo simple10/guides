@@ -146,3 +146,9 @@ Remove mlocate on db or other IO intensive servers
 apt-get purge mlocate
 ```
 
+
+WEB SERVER SECURITY
+===================
+
+http://simonholywell.com/post/2013/04/three-things-i-set-on-new-servers.html
+
