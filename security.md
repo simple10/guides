@@ -46,6 +46,8 @@ Lockdown SSH
 First add your keyless ssh by running the following command from your local machine 
 (or wherever you have SSH keys already setup).
 
+[Create a strong](http://martin.kleppmann.com/2013/05/24/improving-security-of-ssh-private-keys.html) ssh key.
+
 ```bash
 # on machine you're going to ssh from
 ssh-copy-id -i ~/.ssh/id_rsa.pub <server ip>
