@@ -20,7 +20,19 @@ ALL: 1.2.3.4
 ALL: 10.10.10.0/24
 ```
 
-Setup sudo
+
+## Configure fail2ban
+
+```bash
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+vim /etc/fail2ban/jail.local
+```
+
+** Useful Filters **
+* http://serverfault.com/questions/420895/how-to-use-fail2ban-for-nginx
+
+
+## Setup sudo
 
 ```bash
 apt-get install sudo
@@ -33,7 +45,7 @@ root    ALL=(ALL) ALL
 %admin  ALL=(ALL) ALL
 ```
 
-Add users to admin group to allow them to sudo
+## Add users to admin group to allow them to sudo
 
 ```bash
 addgroup admin
@@ -41,7 +53,7 @@ usermod -a -G admin <user>
 ```
 
 
-Lockdown SSH
+## Lockdown SSH
 
 First add your keyless ssh by running the following command from your local machine 
 (or wherever you have SSH keys already setup).

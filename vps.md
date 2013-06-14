@@ -8,6 +8,7 @@ apt-get update
 apt-get upgrade
 apt-get install fail2ban
 apt-get install ufw
+apt-get install chkconfig
 ```
 
 ```bash
@@ -43,6 +44,9 @@ vim /etc/ssh/sshd_config
 # Port 2222
 service ssh restart
 
+# Update ssh port in /etc/services if changed in /etc/ssh/sshd_config
+vim /etc/services
+
 # Cleanup
 rm -rf /root/.ssh
 
@@ -50,14 +54,23 @@ rm -rf /root/.ssh
 ufw default deny incoming
 ufw default allow outgoing
 # Allow ssh on whatever port you set in sshd_config
-ufw allow 2222
+ufw allow ssh
 ufw enable
 ufw status verbose
 # See https://help.ubuntu.com/community/UFW
 
+# Configure fail2ban
+cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+vim /etc/fail2ban/jail.local
+# Modify destemail and enable services as needed
+
 # Setup unattended security upgrades
 # See security.md guide
 ```
+
+
+
+
 
 
 # Database or IO Intensive Servers
@@ -66,6 +79,9 @@ ufw status verbose
 # Disable mlocate
 apt-get purge mlocate
 ```
+
+
+
 
 
 
