@@ -79,7 +79,7 @@ PasswordAuthentication no
 Restart sshd
 
 ```bash
-service sshd restart
+service ssh restart
 ```
 
 
