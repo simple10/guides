@@ -46,6 +46,8 @@ service ssh restart
 
 # Update ssh port in /etc/services if changed in /etc/ssh/sshd_config
 vim /etc/services
+# ssh             2222/tcp
+# ssh             2222/udp
 
 # Cleanup
 rm -rf /root/.ssh
@@ -63,6 +65,8 @@ ufw status verbose
 cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
 vim /etc/fail2ban/jail.local
 # Modify destemail and enable services as needed
+# Restart fail2ban
+service fail2ban restart
 
 # Setup unattended security upgrades
 # See security.md guide
@@ -90,7 +94,7 @@ apt-get purge mlocate
 Copy to /etc/skel/.bashrc and any existing user directories.
 
 ```bash
-# cat /etc/skel/.bashrc 
+# cat /etc/skel/.bashrc
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
