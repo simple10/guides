@@ -142,12 +142,6 @@ Add this line
 ```
 
 
-Remove mlocate on db or other IO intensive servers
-
-```bash
-apt-get purge mlocate
-```
-
 
 WEB SERVER SECURITY
 ===================
