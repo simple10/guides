@@ -21,6 +21,7 @@ apt-get upgrade
 apt-get install fail2ban
 apt-get install ufw
 apt-get install chkconfig
+apt-get install htop
 ```
 
 ```bash
@@ -45,7 +46,7 @@ visudo
 # See security.md guide for more details
 
 # Test logging in without a password
-ssh joe@<SERVER IP> -p 2222
+ssh joe@<SERVER IP> -p 1234
 # Test sudo
 sudo su -
 
@@ -53,13 +54,13 @@ sudo su -
 vim /etc/ssh/sshd_config
 # PermitRootLogin no
 # PasswordAuthentication no
-# Port 2222
+# Port 1234
 service ssh restart
 
 # Update ssh port in /etc/services if changed in /etc/ssh/sshd_config
 vim /etc/services
-# ssh             2222/tcp
-# ssh             2222/udp
+# ssh             1234/tcp
+# ssh             1234/udp
 
 # Cleanup
 rm -rf /root/.ssh
@@ -93,7 +94,10 @@ service fail2ban restart
 
 ```bash
 # Disable mlocate
+chmod -x /etc/cron.daily/mlocate
+# Or
 apt-get purge mlocate
+# Or add 'exit 0' to the second line of the script
 ```
 
 
@@ -166,7 +170,6 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u:\[\033[01;33m\]\w \[\033[01;31m\][remote] \[\033[01;33m\]\h \n\$\[\033[00m\] '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
