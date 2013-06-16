@@ -3,6 +3,18 @@ Assumes Debian or Ubuntu.
 Login as root
 
 ```bash
+# INTERACTIVE
+
+# Make sure apt sources.list is setup
+# See http://debgen.simplylinux.ch/
+vim /etc/apt/sources.list
+# Common sources...
+deb http://ftp.us.debian.org/debian wheezy main
+deb http://ftp.debian.org/debian/ wheezy-updates main
+deb http://security.debian.org/ wheezy/updates main
+```
+
+```bash
 # COPY AND PASTE
 apt-get update
 apt-get upgrade
