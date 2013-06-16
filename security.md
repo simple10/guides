@@ -241,6 +241,8 @@ require {
 	type sysctl_crypto_t;
 	type exim_t;
 	type proc_t;
+	type fail2ban_t;
+	type user_home_dir_t;
 	class dir search;
 	class file { read getattr open };
 	class filesystem getattr;
@@ -250,7 +252,22 @@ allow exim_t sysctl_crypto_t:dir search;
 allow exim_t sysctl_crypto_t:file { read getattr open };
 #============= iptables_t ==============
 allow iptables_t proc_t:filesystem getattr;
+#============= fail2ban_t ==============
+allow fail2ban_t user_home_dir_t:dir search;
 
+
+# After updating the local policy, reboot and check audit2why for additional problems
+
+# Once audit2why is empty, enable enforcing mode
+vim /etc/selinux/config
+SELINUX=enforcing
+# Reboot, run sestatus to make sure selinux is enforcing, and check audit2why again
+# If everything is working, selinux setup is complete
+
+# If using selinux with VPS, make sure to create the .autorelabel file before creating
+# a snapshot of the machine. The file permissions need to be relabeled on first boot
+# or else the new VPS won't boot properly.
+touch /.autorelabel
 
 # To restart a service use run_init
 # See http://www.crypt.gen.nz/selinux/faq.html
