@@ -27,6 +27,16 @@ apt-get install htop
 ```bash
 # INTERACTIVE
 
+# Modify /etc/hosts to use hostname with public IP address and not 127.0.0.1
+# This allows system emails and other services that use gethostbyname() to
+# use the hostname instead of localhost. Alternatively, the hostname can be
+# moved in front of localhost: 127.0.0.1 somehostname localhost
+vim /etc/hosts
+127.0.0.1	localhost
+<public ip address>	<hostname>
+# e.g. 198.192.0.100   droplet
+
+
 # Copy and paste the below .bashrc file
 vim /etc/skel/.bashrc
 
@@ -83,6 +93,12 @@ service fail2ban restart
 
 # Setup unattended security upgrades
 # See security.md guide
+
+# Remove unneeded packages and services
+chkconfig -l
+ps aux
+
+apt-get purge consolekit
 ```
 
 
