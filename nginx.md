@@ -1,7 +1,7 @@
 http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
 
-
-apt-get install nginx
+# Install the naxsi enabled version of Nginx
+apt-get install nginx-naxsi
 vim /etc/nginx/nginx.conf
 
 # Set server tokens to off to prevent nginx version from being exposed
@@ -30,8 +30,18 @@ reboot
 
 # Turn off nginx auto startup
 chkconfig nginx off
-# Turn it on
-chkconfig nginx on --level 2345
+# Add nginx file to monit
+# [...]
+
+# Setup naxsi
+vim /etc/nginx/nginx.conf
+# Uncomment: include /etc/nginx/naxsi_core.rules;
+vim /etc/nginx/sites-enabled/default
+# Add: include /etc/nginx/naxsi.rules;
+service nginx reload
+
+# [optional] Install naxsi UI to monitor and config nasxi through the web
+apt-get install nginx-naxsi-ui
 
 # Open port 80 in the firewall
 ufw allow 80/tcp
