@@ -9,6 +9,7 @@ visible domain: example.com
 ip of outgoing: smtp.mandrillapp.com::587
 dns queries: no
 split: no
+root recipient: [blank]
 
 
 vim exim4.conf.localmacros
