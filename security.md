@@ -42,14 +42,13 @@ visudo
 ```bash
 # sudoers
 root    ALL=(ALL) ALL
-%admin  ALL=(ALL) ALL
-```
+%sudo  ALL=(ALL) ALL
 
-## Add users to admin group to allow them to sudo
+# Add users to admin group to allow them to sudo
+usermod -a -G sudo <user>
 
-```bash
-addgroup admin
-usermod -a -G admin <user>
+# See which users belong to sudo group
+grep ^sudo /etc/group
 ```
 
 
@@ -161,17 +160,10 @@ Add this line
 * http://wiki.debian.org/SELinux/Setup
 * https://fedoraproject.org/wiki/SELinux
 
-### Setup for Ubuntu
-
-```bash
-apt-get install selinux
-# Not sure what else is required?
-```
-
 ### Setup for Debian
 
 ```bash
-apt-get install selinux-basics selinux-policy-default auditd
+apt-get install selinux-basics selinux-policy-default selinux-policy-src auditd
 selinux-activate
 ```
 
@@ -211,6 +203,7 @@ semanage port -a -t ssh_port_t -p tcp 1234
 # can do whatever it wants if it gets exploited
 seinfo -t | grep exec_t
 
+
 # List SELinux booleans
 # Booleans are used to turn on and off specific features of policies
 getsebool -a
@@ -219,6 +212,22 @@ getsebool -a
 ls -Z file.foo
 id -Z
 ps -eZ
+
+# List login user roles
+semanage login -l
+
+# Change __default__ to user_u so new user accounts have fewer privileges
+semanage login -m -s user_u -r s0 __default__
+
+# Change user mapping for existing user
+# Use staff_u for any user that needs sudo privileges...
+# http://danwalsh.livejournal.com/18312.html
+# WARNING: sudo for staff_u doesn't seem to work properly ... still debugging this
+semanage login -a -s user_u joe
+semanage login -a -s staff_u joeadmin
+# Relabel user's home directory files to match the updated role
+restorecon -R -F /home/joe
+
 
 # Generate a policy template that allows all denied requests since last reboot
 # http://docs.fedoraproject.org/en-US/Fedora/13/html/SELinux_FAQ/index.html#id3343680
@@ -258,7 +267,7 @@ allow fsadm_t etc_t:file { write unlink link };
 #============= exim_t ==============
 allow exim_t sysctl_crypto_t:dir search;
 allow exim_t sysctl_crypto_t:file { read getattr open };
-allow system_mail_t var_lib_t:file { read open };
+allow system_mail_t var_lib_t:file { read getattr open };
 #============= iptables_t ==============
 allow iptables_t proc_t:filesystem getattr;
 #============= fail2ban_t ==============
@@ -279,20 +288,63 @@ SELINUX=enforcing
 # or else the new VPS won't boot properly.
 touch /.autorelabel
 
+# List active modules
+semodule -l
+
 # Remove unneeded modules
-semanage -l
-semanage -r apache
-semanage -r git
-# Keep consolekit since it's needed by dbus
+semodule -r apache
+semodule -r git
 
 # To load modules from the default policy
 cd /usr/share/selinux/default/
-semanage -i <module>.pp
+semodule -i <MODULE>.pp
 
 # To restart a service use run_init
 # See http://www.crypt.gen.nz/selinux/faq.html
 run_init /etc/init.d/sshd restart
+
+# To load existing policy modules that are not currently active
+cd usr/share/selinux/default
+semodule -i <MODULE>
+
+# To build new policy modules
+mkdir newpolicy && cd newpolicy
+policygentool <NAME> <PATH TO BIN>
+cp /usr/src/selinux-policy-src/doc/Makefile.example ./Makefile
+# Customize the policy as needed
+vim <NAME>.te
+make
+semodule -i <NAME>.pp
+
+
+
+####################################
+# Misc
+
+# Change to a different user role for testing
+newrole -r sysadm_r
+
+# If AVC is reporting dac_override errors, it's likely because of a ownership problem
+# with a file or directory. To debug, turn on full auditing to see which file is to blame.
+# http://danwalsh.livejournal.com/34903.html
+echo "-w /etc/shadow -p w" >> /etc/audit/audit.rules
+service auditd restart
+# Look at audit.log directly since audit2why might not include the path
+tail /var/log/audit/audit.log
+
+# Use macros whenever possible instead of allow statements
+grep -R <THING_TO_ALLOW> /usr/src/selinux-policy-src/policy/support/
+# Look for 'interface' definitions in *.if files
+# Pick the macro that allows the fewest permissions first then test
+
 ```
+
+# SELinux Resources
+
+* http://wiki.debian.org/SELinux
+* http://danwalsh.livejournal.com/
+* http://www.selinuxbyexample.com/
+
 
 
 # Improve Network Security
