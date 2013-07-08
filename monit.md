@@ -1,3 +1,4 @@
+```bash
 apt-get install monit
 
 vim /etc/inittab
@@ -19,4 +20,7 @@ include exim4
 include fail2ban
 include system
 # ...
+```
+
+Also consider installing watchdog to reset the kernel if the server stops working.
 
