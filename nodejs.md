@@ -83,9 +83,10 @@ apt-get autoremove --purge
 
 # Production Node.js
 
-* Use cluster modules
+* Use cluster module
   * Master monitors and kill workers
   * Workers die early on errors
+* Or use [pm2](https://github.com/Unitech/pm2) to manage workers
 * Use [monit](http://mmonit.com/monit/) to keep node alive
 * Use [nvm](https://github.com/creationix/nvm) or [nave](https://github.com/isaacs/nave/) if multiple versions of node are needed
 
