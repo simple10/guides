@@ -22,7 +22,7 @@ If Pi is setup to use DHCP, it should get an IP address from OSX laptop like 192
 ```bash
 # Reconfigure pi settings like memory, overclocking, etc
 sudo raspi-config
-
+```
 
 
 # Initial Setup
@@ -115,8 +115,8 @@ Use [Deluge](http://deluge-torrent.org/) since uTorrent is not well supported on
 
 http://www.howtogeek.com/142044/how-to-turn-a-raspberry-pi-into-an-always-on-bittorrent-box/
 
-The Deluge packages for Debian 7.0 (wheezy) are missing a few important features like being 
-able to use magnet URLs in the webui. If these features are needed, install deluge from 
+The Deluge packages for Debian 7.0 (wheezy) are missing a few important features like being
+able to use magnet URLs in the webui. If these features are needed, install deluge from
 source otherwise just use apt-get.
 
 ```bash
@@ -126,7 +126,7 @@ tar -xzf deluge-1.3.6.tar.gz
 cd deluge-1.3.6
 
 # Install dependencies
-sudo apt-get install python python-twisted python-twisted-web python-openssl python-simplejson python-setuptools intltool python-xdg python-chardet geoip-database python-libtorrent python-notify python-pygame python-glade2 librsvg2-common xdg-utils python-mako 
+sudo apt-get install python python-twisted python-twisted-web python-openssl python-simplejson python-setuptools intltool python-xdg python-chardet geoip-database python-libtorrent python-notify python-pygame python-glade2 librsvg2-common xdg-utils python-mako
 
 # Create a user and group
 sudo adduser --system --home /home/deluge --group deluge
@@ -184,7 +184,7 @@ To remove Deluge
 apt-get purge deluge-common deluge-console deluged geoip-database libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libgeoip1 libtorrent-rasterbar6 python-chardet python-libtorrent python-openssl python-pam python-pkg-resources python-serial python-twisted-bin python-twisted-core python-twisted-web python-xdg python-zope.interface deluge-web python-mako python-markupsafe
 
 # If installed from source
-autoconf automake autopoint autotools-dev geoip-database gettext intltool javascript-common libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libencode-locale-perl libfile-listing-perl libfont-afm-perl libgeoip1 libgettextpo0 libhtml-form-perl libhtml-format-perl libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libio-socket-ip-perl libio-socket-ssl-perl libjs-jquery liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl libnet-http-perl libnet-ssleay-perl libsocket-perl libtorrent-rasterbar6 libunistring0 liburi-perl libwww-perl libwww-robotrules-perl libxml-parser-perl m4 python-cairo python-chardet python-crypto python-glade2 python-gobject-2 python-gtk2 python-libtorrent python-mako python-markupsafe python-notify python-openssl python-pam python-pkg-resources python-pyasn1 python-serial python-setuptools python-simplejson python-twisted python-twisted-bin python-twisted-conch python-twisted-core python-twisted-lore python-twisted-mail python-twisted-names python-twisted-news python-twisted-runner python-twisted-web python-twisted-words python-xdg python-zope.interface wwwconfig-common  
+autoconf automake autopoint autotools-dev geoip-database gettext intltool javascript-common libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libencode-locale-perl libfile-listing-perl libfont-afm-perl libgeoip1 libgettextpo0 libhtml-form-perl libhtml-format-perl libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libio-socket-ip-perl libio-socket-ssl-perl libjs-jquery liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl libnet-http-perl libnet-ssleay-perl libsocket-perl libtorrent-rasterbar6 libunistring0 liburi-perl libwww-perl libwww-robotrules-perl libxml-parser-perl m4 python-cairo python-chardet python-crypto python-glade2 python-gobject-2 python-gtk2 python-libtorrent python-mako python-markupsafe python-notify python-openssl python-pam python-pkg-resources python-pyasn1 python-serial python-setuptools python-simplejson python-twisted python-twisted-bin python-twisted-conch python-twisted-core python-twisted-lore python-twisted-mail python-twisted-names python-twisted-news python-twisted-runner python-twisted-web python-twisted-words python-xdg python-zope.interface wwwconfig-common
 # Then manually remove deluge??? Or does the setup script have an uninstall???
 ```
 
@@ -218,6 +218,20 @@ cd /data
 touch test.txt
 ```
 
+
+# Set Static IP Address
+
+```bash
+sudo vi /etc/networking/interfaces
+
+    #iface eth0 inet dhcp
+    iface eth0 inet static
+      address 192.168.0.99
+      netmask 255.255.255.0
+      gateway 192.168.0.1
+
+ifdown eth0 && ifup eth0
+```
 
 # Setup SAMBA
 
