@@ -1,6 +1,6 @@
 #!/bin/sh
 ### BEGIN INIT INFO
-# Provides:          deluge-daemon
+# Provides:          deluged
 # Required-Start:    $local_fs $remote_fs
 # Required-Stop:     $local_fs $remote_fs
 # Should-Start:      $network
@@ -9,7 +9,7 @@
 # Default-Stop:      0 1 6
 # Short-Description: Daemonized version of deluge and webui.
 # Description:       Starts the deluge daemon with the user specified in
-#                    /etc/default/deluge-daemon.
+#                    /etc/default/deluged.
 ### END INIT INFO
 
 # Author: Adolfo R. Brandes 
@@ -24,14 +24,14 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Deluge Daemon"
 NAME1="deluged"
 NAME2="deluge"
-DAEMON1=/usr/bin/deluged
+DAEMON1=/usr/local/bin/deluged
 DAEMON1_ARGS="-d"             # Consult `man deluged` for more options
-DAEMON2=/usr/bin/deluge-web
+DAEMON2=/usr/local/bin/deluge-web
 DAEMON2_ARGS=""               # Consult `man deluge-web` for more options
 PIDFILE1=/var/run/$NAME1.pid
 PIDFILE2=/var/run/$NAME2.pid
 UMASK=022                     # Change this to 0 if running deluged as its own user
-PKGNAME=deluge-daemon
+PKGNAME=deluged
 SCRIPTNAME=/etc/init.d/$PKGNAME
 
 # Exit if the package is not installed
