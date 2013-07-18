@@ -162,7 +162,7 @@ sudo vi /etc/ufw/applications.d/ufw-bittorrent
    title=Deluge
    description=Deluge BitTorrent client
    # Change ports to whatever was configured in core.conf
-   ports=8112/tcp|49251:49259/tcp|49251:49259/udp
+   ports=8112/tcp|49351:49359/tcp|49351:49359/udp
 
 sudo ufw allow Deluge
 
@@ -181,17 +181,31 @@ https://192.168.2.2:8112
 # Default password is "deluge"
 ```
 
+# Firewall Issues
 
-To remove Deluge
+Open Preferences > Network in the webui or edit core.conf.
+
+1. Uncheck random ports for Incoming Ports
+2. Assign incoming ports
+  * ex: 49351 - 49359
+3. Disable UPnP and NAT-PMP
+
+Assign a static IP address to the RaspberryPi. See Static IP section below.
+
+In your router, forward ports (ex: 49351-49359) tcp and udp to the pi's IP address.
+
+On the pi, make sure the firewall allows for incoming connections.
 
 ```bash
-# If installed as a package
-apt-get purge deluge-common deluge-console deluged geoip-database libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libgeoip1 libtorrent-rasterbar6 python-chardet python-libtorrent python-openssl python-pam python-pkg-resources python-serial python-twisted-bin python-twisted-core python-twisted-web python-xdg python-zope.interface deluge-web python-mako python-markupsafe
+sudo ufw status verbose
+# Should show something like...
 
-# If installed from source
-autoconf automake autopoint autotools-dev geoip-database gettext intltool javascript-common libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libencode-locale-perl libfile-listing-perl libfont-afm-perl libgeoip1 libgettextpo0 libhtml-form-perl libhtml-format-perl libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libio-socket-ip-perl libio-socket-ssl-perl libjs-jquery liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl libnet-http-perl libnet-ssleay-perl libsocket-perl libtorrent-rasterbar6 libunistring0 liburi-perl libwww-perl libwww-robotrules-perl libxml-parser-perl m4 python-cairo python-chardet python-crypto python-glade2 python-gobject-2 python-gtk2 python-libtorrent python-mako python-markupsafe python-notify python-openssl python-pam python-pkg-resources python-pyasn1 python-serial python-setuptools python-simplejson python-twisted python-twisted-bin python-twisted-conch python-twisted-core python-twisted-lore python-twisted-mail python-twisted-names python-twisted-news python-twisted-runner python-twisted-web python-twisted-words python-xdg python-zope.interface wwwconfig-common
-# Then manually remove deluge??? Or does the setup script have an uninstall???
+  49351:49359/tcp (Deluge)   ALLOW IN    Anywhere
+  49351:49359/udp (Deluge)   ALLOW IN    Anywhere
+
 ```
+
+Now watch the webui or deluge console to see if bits are being uploaded.
 
 
 # Mount OSX Journaled Drives
@@ -261,3 +275,13 @@ sudo apt-get install -t experimental <package>
 ```
 
 
+# Removing Deluge
+
+```bash
+# If installed as a package
+apt-get purge deluge-common deluge-console deluged geoip-database libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libgeoip1 libtorrent-rasterbar6 python-chardet python-libtorrent python-openssl python-pam python-pkg-resources python-serial python-twisted-bin python-twisted-core python-twisted-web python-xdg python-zope.interface deluge-web python-mako python-markupsafe
+
+# If installed from source
+autoconf automake autopoint autotools-dev geoip-database gettext intltool javascript-common libboost-filesystem1.49.0 libboost-python1.49.0 libboost-system1.49.0 libboost-thread1.49.0 libencode-locale-perl libfile-listing-perl libfont-afm-perl libgeoip1 libgettextpo0 libhtml-form-perl libhtml-format-perl libhtml-parser-perl libhtml-tagset-perl libhtml-tree-perl libhttp-cookies-perl libhttp-daemon-perl libhttp-date-perl libhttp-message-perl libhttp-negotiate-perl libio-socket-ip-perl libio-socket-ssl-perl libjs-jquery liblwp-mediatypes-perl liblwp-protocol-https-perl libmailtools-perl libnet-http-perl libnet-ssleay-perl libsocket-perl libtorrent-rasterbar6 libunistring0 liburi-perl libwww-perl libwww-robotrules-perl libxml-parser-perl m4 python-cairo python-chardet python-crypto python-glade2 python-gobject-2 python-gtk2 python-libtorrent python-mako python-markupsafe python-notify python-openssl python-pam python-pkg-resources python-pyasn1 python-serial python-setuptools python-simplejson python-twisted python-twisted-bin python-twisted-conch python-twisted-core python-twisted-lore python-twisted-mail python-twisted-names python-twisted-news python-twisted-runner python-twisted-web python-twisted-words python-xdg python-zope.interface wwwconfig-common
+# Then manually remove deluge??? Or does the setup script have an uninstall???
+```
