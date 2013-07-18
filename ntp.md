@@ -10,6 +10,11 @@ semodule -i ntp.pp
 chkconfig ntp off
 vim /etc/init.d/conf.d/ntp
 # See ntp monit conf below
+
+# Check ntp peers
+ntpdc
+> peers
+
 ```
 
 
