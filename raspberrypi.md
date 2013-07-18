@@ -256,6 +256,12 @@ ifdown eth0 && ifup eth0
 
 http://www.howtogeek.com/139433/how-to-turn-a-raspberry-pi-into-a-low-power-network-storage-device/
 
+```bash
+sudo apt-get install samba samba-common-bin
+sudo vi /etc/samba/smb.conf
+sudo service samba restart
+sudo ufw allow CIFS
+```
 
 
 # Add Debian Sources
