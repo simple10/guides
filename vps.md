@@ -47,8 +47,10 @@ adduser joe
 usermod -a -G sudo joe
 
 # Authorize joe to login using ssh keys
-# From a machine that already has joe's pub key...
+# From a machine that already has joe's pub key
 ssh-copy-id -i ~/.ssh/id_rsa.pub joe@<SERVER IP>
+# If ssh-copy-id is not installed on OSX
+brew install ssh-copy-id
 
 # Verify sudo group is setup properly
 visudo

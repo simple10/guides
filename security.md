@@ -67,7 +67,10 @@ First add your keyless ssh by running the following command from your local mach
 [Create a strong](http://martin.kleppmann.com/2013/05/24/improving-security-of-ssh-private-keys.html) ssh key.
 
 ```bash
-# on machine you're going to ssh from
+# Install ssh-copy-id on OSX
+brew install ssh-copy-id
+
+# On machine you're going to ssh from
 ssh-copy-id -i ~/.ssh/id_rsa.pub <server ip>
 ```
 
