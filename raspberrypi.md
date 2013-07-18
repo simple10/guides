@@ -150,14 +150,19 @@ sudo vi /home/deluge/.config/deluge/core.conf
 # example: /data/torrents
 # Change proxies settings to use TorGuard or BTGuard
 # Use type=3 for Socks5 with Auth
+# Change port range from 6881,6889 to something between 49152 and 65535 to get around ISP throttling
 sudo vi /home/deluge/.config/deluge/web.conf
 # Set https to true
 
-# Start the deluge daemon and web client
-sudo service deluged start
-
+# Update ufw deluge application with custom ports
+sudo vi /etc/ufw/applications.d/ufw-bittorrent
+# Open up bittorrent listening ports
+sudo ufw allow Deluge
 # Open up the webui port
 sudo ufw allow 8112/tcp
+
+# Start the deluge daemon and web client
+sudo service deluged start
 
 # Check the logs
 sudo tail /home/deluge/.config/deluge/deluge.log
