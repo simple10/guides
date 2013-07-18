@@ -1,7 +1,14 @@
 LINUX SECURITY
 ==============
 
-http://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+Quick Links
+
+* http://plusbryan.com/my-first-5-minutes-on-a-server-or-essential-security-for-linux-servers
+* http://www.cyberciti.biz/tips/selinux-vs-apparmor-vs-grsecurity.html
+
+[SELinux](http://wiki.debian.org/SELinux), [AppAmmor](http://wiki.debian.org/AppArmor/HowTo), and [grsecurity](http://grsecurity.net/) are all great ways to harden your server.
+
+AppArmor is enabled by default in Ubuntu 7.10+.
 
 ## Debian/Ubuntu
 
