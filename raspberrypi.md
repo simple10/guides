@@ -156,10 +156,15 @@ sudo vi /home/deluge/.config/deluge/web.conf
 
 # Update ufw deluge application with custom ports
 sudo vi /etc/ufw/applications.d/ufw-bittorrent
-# Open up bittorrent listening ports
+
+   # Open up bittorrent listening ports
+   [Deluge]
+   title=Deluge
+   description=Deluge BitTorrent client
+   # Change ports to whatever was configured in core.conf
+   ports=8112/tcp|49251:49259/tcp|49251:49259/udp
+
 sudo ufw allow Deluge
-# Open up the webui port
-sudo ufw allow 8112/tcp
 
 # Start the deluge daemon and web client
 sudo service deluged start
@@ -224,11 +229,11 @@ touch test.txt
 ```bash
 sudo vi /etc/networking/interfaces
 
-    #iface eth0 inet dhcp
-    iface eth0 inet static
-      address 192.168.0.99
-      netmask 255.255.255.0
-      gateway 192.168.0.1
+  #iface eth0 inet dhcp
+  iface eth0 inet static
+    address 192.168.0.99
+    netmask 255.255.255.0
+    gateway 192.168.0.1
 
 ifdown eth0 && ifup eth0
 ```
