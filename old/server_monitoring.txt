@@ -1,0 +1,59 @@
+################################################################################
+Monitoring Process Activity
+################################################################################
+
+The psacct package must be installed.
+
+Use ac, lastcomm, accton, and sa to monitor processes.
+
+1) Turn on psacct
+   # accton /var/account/pacct
+
+
+
+################################################################################
+Viewing Active Network Connections
+################################################################################
+
+netstat -punta
+netstat -nlp
+
+
+fuser -n tcp 775 
+lsof -i tcp:775 
+
+# repeat lsof output of files bound to port 80 and owned by root
+lsof -r 2 -a -i tcp:80 -u root
+
+
+
+# show all data sent to IP address and specified port
+tcpdump -s 0 -X -vvv 'dst 69.64.32.39' and 'tcp port 6969'
+
+
+
+
+
+################################################################################
+RPC Services
+################################################################################
+
+rpcinfo -p localhost
+
+
+
+
+################################################################################
+Network Debugging
+################################################################################
+mtr
+
+
+
+old files . . .
+tmpwatch
+
+good text html browser . . .
+elinks
+
+

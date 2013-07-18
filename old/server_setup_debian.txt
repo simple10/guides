@@ -1,0 +1,269 @@
+################################################################################
+Upgrading Distros
+################################################################################
+http://glasnost.beeznest.org/articles/109
+
+Upgrading from Woody (stable) to Sarge
+
+1) edit /etc/apt/sources.list
+   a) change all "stable" or "woody" to "sarge"
+   b) comment out backports sources, if any
+
+2) # apt-get update
+
+3) # apt-get dist-upgrade
+
+4) verify everything by running it again ...
+   a) # apt-get update
+   b) # apt-get dist-upgrade
+
+5) verify lilo (or grub) is using the correct kernel.  sarge uses lilo by default.
+
+
+
+################################################################################
+Setup Helper Scripts
+################################################################################
+
+1) get helper scripts from already configured server or backup
+   # scp user@server:/etc/*.pl /etc/
+
+   enable.pl and disable.pl should be copied to /etc/
+
+
+################################################################################
+Disable Unneeded Services
+################################################################################
+
+4) disable senseless other daemons & startup annoyances
+   # perl /etc/disable.pl kudzu
+   # perl /etc/disable.pl xfs
+   # perl /etc/disable.pl portmap
+   # perl /etc/disable.pl nfslock
+   # perl /etc/disable.pl autofs
+   # perl /etc/disable.pl xinetd
+   # perl /etc/disable.pl netfs
+
+
+################################################################################
+Setup Firewall
+################################################################################
+
+1) get /etc/init.d/firewall script from already configured server
+   # scp user@server:/etc/init.d/firewall /etc/init.d/
+
+2) edit /etc/init.d/firewall as needed
+
+3) make sure firewall will start on reboot
+   # perl /etc/enable.pl firewall
+
+4) make sure iptables script is disabled since firewall script replaces it
+   # perl /etc/disable.pl iptables
+
+5) start firewall
+   # /etc/init.d/firewall start
+
+6) verify rules
+   # iptables -L
+
+
+
+################################################################################
+Install Grsecurity Kernel
+################################################################################
+
+5) setup the 2.4.29-grsec kernel
+   # cd /boot
+   # scp chicken:/boot/*29* .
+   # rm System.map
+   # ln -s System.map-2.4.29-grsec System.map
+   # xemacs /etc/grub.conf
+
+   You should add a new "title" section as follows:
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+title POPCAST Linux (2.4.29-grsec)
+      root (hd0,0)
+      kernel /vmlinuz-2.4.29-grsec ro root=LABEL=/ panic=10
+      initrd /initrd-2.4.29-grsec.img
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+      You should make sure that that is the first title
+      section and that you have "default=0" as a line.
+
+      NOTE: if this is one of the RACKABLES, you should add:
+      "hdd=ide-scsi apm=off" at the end of the "kernel"
+      line above.
+
+6) You're ready to boot! Cross your fingers and type "reboot".
+   If all has gone well, the system should boot properly and
+   welcome you with a login prompt after a bit of thinking.
+   Don't worry about a handful of grsecurity warnings/errors.
+
+7) You now need to "clean up" a library or two that aren't
+   tagged properly.
+        (to fix PHP/Apache)
+   # execstack -c /usr/lib/libgmp.so.3.3.2
+        (to fix up2date/rpm)
+   # execstack -c /usr/lib/libbeecrypt.so.6.1.0
+        (to fix PHP+mysql)
+   # execstack -c /usr/lib/libmysqlclient.so.10
+
+
+
+################################################################################
+Installing and Configuring NTP
+################################################################################
+
+An accurate system clock is really important for proper logging and system stability.
+
+
+1) install ntp
+   # apt-get install ntp
+
+   Depending on distro, ntp-simple may need to be installed separately.  For woody, ntp-simple
+   is a dep for ntp and will install automatically.
+
+2) install ntpdate
+   # apt-get install ntpdate
+
+3) stop ntp (it starts when ntp is installed)
+   # /etc/init.d/ntp stop
+
+4) make sure timezone is setup properly
+   # tzsetup
+
+   Use US/Pacific
+
+5) configure /etc/ntp.conf (see below sample file)
+
+6) make sure ntpd will start on reboot
+   # perl /etc/enable.pl ntp
+
+7) manually sync ntp with server
+   # ntpdate -b time.apple.com
+
+
+8) start ntpd
+   # /etc/init.d/ntp start
+
+9) after a couple minutes, make sure ntpd is syncing properly
+   # ntpdc
+     > peers
+
+		### unhealthly output ###
+
+		      remote           local      st poll reach  delay   offset    disp
+		=======================================================================
+		=nist1.aol-ca.tr 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=usno.pa-x.dec.c 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=207.126.98.204. 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=clock.via.net   5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=clock.isc.org   5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=time0.apple.com 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+
+
+		### healthly output ... YAY! ###
+
+		     remote           local      st poll reach  delay   offset    disp
+		=======================================================================
+		=nist1.aol-ca.tr 208.185.251.17   1   64    3 0.00157 -0.027897 3.93774
+		=usno.pa-x.dec.c 208.185.251.17   1   64    3 0.00191 -0.024570 3.93774
+		=207.126.98.204. 208.185.251.17   1   64    3 0.00079 -0.020994 3.93773
+		=clock.via.net   208.185.251.17   1   64    3 0.00208 -0.025405 3.93773
+		=clock.isc.org   208.185.251.17   2   64    3 0.00455 -0.025518 3.93774
+		=time2.apple.com 208.185.251.17   2   64    3 0.00290 -0.024874 3.93774
+
+
+
+
+#
+# /etc/ntp.conf
+#
+
+
+driftfile /var/lib/ntp/drift
+
+
+# Prohibit general access to this service.
+restrict default ignore
+
+restrict 127.0.0.1
+
+# apple
+restrict 17.254.0.26 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.27 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.28 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.31 mask 255.255.255.255 nomodify notrap noquery
+server time.apple.com
+
+# via
+restrict 209.81.9.7 mask 255.255.255.255 nomodify notrap noquery
+server clock.via.net
+
+# glassey
+restrict 207.126.98.204 mask 255.255.255.255 nomodify notrap noquery
+server nist1-sj.glassey.com
+
+# truetime
+restrict 207.200.81.113 mask 255.255.255.255 nomodify notrap noquery
+server nist1.aol-ca.truetime.com
+
+# dec
+restrict 204.123.2.72 mask 255.255.255.255 nomodify notrap noquery
+server usno.pa-x.dec.com
+
+# isc
+restrict 204.152.184.72 mask 255.255.255.255 nomodify notrap noquery
+server clock.isc.org
+
+
+
+
+################################################################################
+Setting up SUDO and preventing Root SSH Login
+################################################################################
+
+The goal here is to increase security by preventing root ssh login and eliminating 
+the need for admin users to login into root.  Instead, admin users should log 
+into their respective user accounts and "sudo su -"
+
+
+Setting up sudo . . .
+
+1) edit /etc/sudoers by using visudo (safer than directly editing the file)
+   # visudo
+
+2) add full sudo privileges for admin users.  WARNING!!! This will give these user
+   full root privileges.
+
+   # User alias specification
+   mfleet ALL=(ALL) ALL     # WARNING!!! root privileges
+   jjohnston ALL=(ALL) ALL  # WARNING!!! root privileges
+
+3) exit visudo with the ":wq" command to write the changes
+
+4) verify changes
+   # cat /etc/sudoers
+
+
+Disabling root ssh login . . .
+
+1) edit /etc/ssh/sshd_config, set PermitRootLogin to no
+   PermitRootLogin no
+
+2) restart sshd
+   kill -HUP `cat /var/run/sshd.pid`
+
+
+
+
+################################################################################
+Make Things Pretty
+################################################################################
+
+1) add the following lines to /etc/profile
+
+   alias ll="ls -l --color=auto"
+   alias ls="ls --color=auto"
+

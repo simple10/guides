@@ -1,0 +1,618 @@
+################################################################################
+Setting hostname
+################################################################################
+
+1) set hostname 
+   # hostname mybox.domain.com
+
+2) edit /etc/sysconfig/network
+   change HOSTNAME=mybox.domain.com
+
+3) edit /etc/hosts
+   should look something like . . .
+   127.0.0.1	mybox.domain.com mybox localhost.localdomain localhost 
+
+4) test hostname
+   # hostname -s
+     mybox
+   # hostname -d
+     domain.com
+   # hostname -f
+     mybox.domain.com
+   # hostname -a
+     mybox localhost.localdomain localhost 
+   # hostname
+     mybox.domain.com
+
+
+################################################################################
+Setting Up Up2Date
+################################################################################
+
+backup your old /etc/sysconfig/rhn/sources file.
+
+wget www.simpli.biz/sources
+mv sources /etc/sysconfig/rhn/sources
+rpm --import /usr/share/rhn/* (errors will output, not sure if this is normal, ask Brandon at Simpli)
+up2date -uf (updates all packages including the kernel)
+up2date -u package_name (updates a single package)
+
+Note: use up2date instead of yum since the White Box yum servers are really slow.
+Not sure if simpli servers listed in above sources file support yum, but probably 
+because up2date on White Box uses yum.  However, running yum directly will use 
+servers listed in /etc/yum.conf so update them as needed.
+
+Updating kernel . . .
+Make sure you add "apm=off" after the kernel line in the /etc/grub.conf file.
+
+
+
+################################################################################
+Installing and Configuring NTP
+################################################################################
+
+An accurate system clock is really important for proper logging and system stability.
+
+
+1) install ntp
+   # up2date -i ntp
+
+2) make sure ntpd will start on reboot
+   # chkconfig --level 2345 ntpd on
+
+3) configure /etc/ntp.conf (see below sample file)
+
+4) make sure timezone is setup properly in /etc/sysconfig/clock
+
+   ZONE="America/Los_Angeles"
+   UTC=false
+   ARC=false
+
+
+5) make sure ntpd is not running
+   # service ntpd stop
+   # ps -auxww | grep ntp
+
+6) manually sync ntp with server
+   # ntpdate -b time.apple.com
+
+7) start ntpd
+   # service ntpd start
+
+8) after a couple minutes, make sure ntpd is syncing properly
+   # ntpdc
+     > peers
+
+		### unhealthly output ###
+
+		      remote           local      st poll reach  delay   offset    disp
+		=======================================================================
+		=nist1.aol-ca.tr 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=usno.pa-x.dec.c 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=207.126.98.204. 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=clock.via.net   5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=clock.isc.org   5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+		=time0.apple.com 5.0.0.0         16  128    0 0.00000  0.000000 0.00000
+
+
+		### healthly output ... YAY! ###
+
+		     remote           local      st poll reach  delay   offset    disp
+		=======================================================================
+		=nist1.aol-ca.tr 208.185.251.17   1   64    3 0.00157 -0.027897 3.93774
+		=usno.pa-x.dec.c 208.185.251.17   1   64    3 0.00191 -0.024570 3.93774
+		=207.126.98.204. 208.185.251.17   1   64    3 0.00079 -0.020994 3.93773
+		=clock.via.net   208.185.251.17   1   64    3 0.00208 -0.025405 3.93773
+		=clock.isc.org   208.185.251.17   2   64    3 0.00455 -0.025518 3.93774
+		=time2.apple.com 208.185.251.17   2   64    3 0.00290 -0.024874 3.93774
+
+
+
+# Prohibit general access to this service.
+restrict default ignore
+
+# Permit all access over the loopback interface.  This could
+# be tightened as well, but to do so would effect some of
+# the administrative functions.
+restrict 127.0.0.1 
+
+# -- CLIENT NETWORK -------
+# Permit systems on this network to synchronize with this
+# time service.  Do not permit those systems to modify the
+# configuration of this service.  Also, do not use those
+# systems as peers for synchronization.
+# restrict 192.168.1.0 mask 255.255.255.0 notrust nomodify notrap
+
+# --- OUR TIMESERVERS ----- 
+# or remove the default restrict line 
+# Permit time synchronization with our time source, but do not
+# permit the source to query or modify the service on this system.
+
+# restrict mytrustedtimeserverip mask 255.255.255.255 nomodify notrap noquery
+# server mytrustedtimeserverip
+
+# --- NTP MULTICASTCLIENT ---
+#multicastclient			# listen on default 224.0.1.1
+# restrict 224.0.1.1 mask 255.255.255.255 notrust nomodify notrap
+# restrict 192.168.1.0 mask 255.255.255.0 notrust nomodify notrap
+
+# --- GENERAL CONFIGURATION ---
+#
+# Undisciplined Local Clock. This is a fake driver intended for backup
+# and when no outside source of synchronized time is available. The
+# default stratum is usually 3, but in this case we elect to use stratum
+# 0. Since the server line does not have the prefer keyword, this driver
+# is never used for synchronization, unless no other other
+# synchronization source is available. In case the local host is
+# controlled by some external source, such as an external oscillator or
+# another protocol, the prefer keyword would cause the local host to
+# disregard all other synchronization sources, unless the kernel
+# modifications are in use and declare an unsynchronized condition.
+#
+#server	127.127.1.0	# local clock
+#fudge	127.127.1.0 stratum 10	
+
+# apple
+restrict 17.254.0.26 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.27 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.28 mask 255.255.255.255 nomodify notrap noquery
+restrict 17.254.0.31 mask 255.255.255.255 nomodify notrap noquery
+server time.apple.com
+
+# via
+restrict 209.81.9.7 mask 255.255.255.255 nomodify notrap noquery
+server clock.via.net
+
+# glassey
+restrict 207.126.98.204 mask 255.255.255.255 nomodify notrap noquery
+server nist1-sj.glassey.com
+
+# truetime
+restrict 207.200.81.113 mask 255.255.255.255 nomodify notrap noquery
+server nist1.aol-ca.truetime.com
+
+# dec
+restrict 204.123.2.72 mask 255.255.255.255 nomodify notrap noquery
+server usno.pa-x.dec.com
+
+# isc
+restrict 204.152.184.72 mask 255.255.255.255 nomodify notrap noquery
+server clock.isc.org
+
+
+
+#
+# Drift file.  Put this in a directory which the daemon can write to.
+# No symbolic links allowed, either, since the daemon updates the file
+# by creating a temporary in the same directory and then rename()'ing
+# it to the file.
+#
+driftfile /var/lib/ntp/drift
+#broadcastdelay	0.008
+
+#
+# Authentication delay.  If you use, or plan to use someday, the
+# authentication facility you should make the programs in the auth_stuff
+# directory and figure out what this number should be on your machine.
+#
+#authenticate yes
+
+#
+# Keys file.  If you want to diddle your server at run time, make a
+# keys file (mode 600 for sure) and define the key number to be
+# used for making requests.
+#
+# PLEASE DO NOT USE THE DEFAULT VALUES HERE. Pick your own, or remote
+# systems might be able to reset your clock at will. Note also that
+# ntpd is started with a -A flag, disabling authentication, that
+# will have to be removed as well.
+#
+#keys		/etc/ntp/keys
+
+
+
+
+
+
+################################################################################
+Setting up SUDO and preventing Root SSH Login
+################################################################################
+
+The goal here is to increase security by preventing root ssh login and eliminating 
+the need for admin users to login into root.  Instead, admin users should log 
+into their respective user accounts and "sudo su -"
+
+
+Setting up sudo . . .
+
+1) edit /etc/sudoers by using visudo (safer than directly editing the file)
+   # visudo
+
+2) add full sudo privileges for admin users.  WARNING!!! This will give these user
+   full root privileges.
+
+   # User alias specification
+   mfleet ALL=(ALL) ALL     # WARNING!!! root privileges
+   jjohnston ALL=(ALL) ALL  # WARNING!!! root privileges
+
+3) exit visudo with the ":wq" command to write the changes
+
+4) verify changes
+   # cat /etc/sudoers
+
+
+Disabling root ssh login . . .
+
+1) edit /etc/ssh/sshd_config, set PermitRootLogin to no
+   PermitRootLogin no
+
+2) restart sshd
+   kill -HUP `cat /var/run/sshd.pid`
+
+
+
+
+################################################################################
+Install Firewall
+################################################################################
+
+Quick Blocking of All but SSH and Ping
+--------------------------------------
+iptables -F INPUT
+iptables -A INPUT -p tcp --dport ssh -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p icmp -m icmp --icmp-type echo-request -j ACCEPT
+iptables -A INPUT -j REJECT
+service iptables save
+
+Note: the above rules makes logging into SSH slow.  The rules may need some 
+tweaking, but they work as a quick hack before setting up FireHOL.
+
+
+Install FireHOL
+---------------
+FireHOL is a script that aids in intuitive iptable configuration.
+
+1) Download FireHOL rpm from http://firehol.sourceforge.net/
+
+2) Install rpm
+   # rpm -i firehol-*.rpm
+
+3) Run # service firehol helpme >/tmp/firehol.conf 
+
+4) Run # mv /tmp/firehold.conf /etc/firehol/firehol.conf
+
+5) Run # service firehol try
+
+
+################################################################################
+Removing Unnecessary Services and Accounts
+################################################################################
+
+Additional References:
+http://www.yolinux.com/TUTORIALS/LinuxTutorialInternetSecurity.html#SECURITY
+http://www.dynamicnet.net/customer/h-sphere/security/index_redhat_linux.htm
+
+
+1) remove the following RPM packages.
+
+   Use "yum remove [package name]".  If yum is running too slow, use "rpm -ev [package name]".
+
+   isdn
+   pcmcia - cardbus
+   netdump - remote kernel dumping, requires netdump-server running on another box
+   irda - infrared
+   apmd - advanced power management (for laptops mostly)
+   cups - printing support
+   foomatic - printing support
+   eject
+   redhat-config-printer-gui
+   redhat-config-printer
+   talk
+
+   cups ...
+   rpm -ev --nodeps cups
+   rpm -ev cups-libs ghostscript ghostscript-fonts gimp-print
+
+
+Whitebox copy and past list . . .
+
+rpm -e isdn4k-utils
+rpm -e kernel-pcmcia-cs
+rpm -e netdump
+rpm -e irda-utils
+rpm -e apmd
+rpm -e redhat-config-printer-gui
+rpm -e redhat-config-printer
+rpm -e Omni-foomatic
+rpm -e foomatic
+rpm -e eject
+rpm -e talk
+rpm -e redhat-lsb
+rpm -e cups
+rpm -e lha
+rpm -e ddd
+rpm -e ed
+rpm -e mkbootdisk
+rpm -e dosfstools
+rpm -e nc
+rpm -e wvdial
+rpm -e libwvstreams
+rpm -e dhclient
+rpm -e redhat-config-httpd
+rpm -e redhat-config-services
+rpm -e redhat-config-network
+rpm -e redhat-config-bind
+rpm -e gnome-python2
+rpm -e gnome-python2-bonobo
+rpm -e gnome-python2-gtkhtml2
+rpm -e gtkhtml2
+rpm -e memprof
+rpm -e libgnomeui
+rpm -e libbonoboui
+rpm -e libgnome
+rpm -e gnome-vfs2
+rpm -e libbonobo
+rpm -e libao-devel
+rpm -e libao
+rpm -e esound
+rpm -e commons-modeler
+rpm -e mx4j
+rpm -e commons-digester
+rpm -e commons-beanutils
+rpm -e pnm2ppa
+rpm -e ghostscript-fonts ghostscript gimp-print
+rpm -e usermode-gtk
+rpm -e arts
+rpm -e libvorbis-devel
+rpm -e libvorbis
+rpm -e ElectricFence
+rpm -e libtool
+rpm -e ant
+rpm -e ant-devel
+rpm -e ant-libs
+rpm -e javamail
+rpm -e jaf
+rpm -e im-sdk
+rpm -e libgcj-devel gcc-java
+rpm -e ppp rp-pppoe
+rpm -e redhat-config-securitylevel-tui redhat-config-securitylevel
+rpm -e XFree86-truetype-fonts VFlib2
+rpm -e XFree86-xauth
+rpm -e openmotif
+rpm -e redhat-menus htmlview redhat-config-samba
+rpm -e tftp
+rpm -e wireless-tools
+rpm -e redhat-switch-mail-gnome
+rpm -e gail
+rpm -e gnome-python2-canvas
+rpm -e redhat-config-nfs
+rpm -e pygtk2-libglade
+rpm -e pygtk2
+rpm -e libgnomecanvas
+rpm -e libglade2
+rpm -e audiofile
+rpm -e xalan-j
+rpm -e bcel
+rpm -e jakarta-regexp
+rpm -e cup-v10k
+rpm -e mpage
+rpm -e urw-fonts
+rpm -e libvorbis
+rpm -e libogg-devel
+rpm -e libogg
+rpm -e doxygen
+rpm -e samba
+rpm -e samba-client
+rpm -e samba-common
+rpm -e cups-libs
+rpm -e ipsec-tools
+rpm -e commons-beanutils
+rpm -e commons-collections
+rpm -e Omni
+rpm -e junit
+
+
+<<< optional >>>
+
+# software raid management (not needed with 3ware, Adaptec, etc.)
+rpm -e mdadm
+
+
+
+Note: leave XFree86-font-utils because chkfontpath needs it and chkfontpath may be needed by rhn
+
+
+
+
+2) Remove unneeded user and group accounts.
+
+userdel adm
+userdel lp
+userdel news
+userdel uucp
+userdel operator
+userdel games
+userdel gopher
+groupdel adm
+groupdel lp
+groupdel news
+groupdel uucp
+groupdel games
+groupdel dip
+
+
+3) Disable RPC services.
+
+   See what services are available . . .
+   # rpcinfo -p localhost
+
+   Turn off portmap (disables RPC)
+   # service portmap stop
+
+   Make sure portmap does not startup automatically (by default, portmap has levels 345 on)
+   # chkconfig --level 345 portmap off
+
+
+
+################################################################################
+Harden System
+################################################################################
+
+1) Secure host.conf from spoofed IP's.  Add the following lines to the end of /etc/host.conf . . .
+
+   # check for IP address spoofing
+   nospoof on
+   spoofalert on
+
+
+2) Remove user and world access to compilers
+
+chmod 700 /usr/bin/wget 
+chmod 700 /usr/local/bin/lynx 
+chmod 700 /usr/bin/bcc 
+chmod 700 /usr/bin/c++ 
+chmod 700 /usr/bin/byacc 
+chmod 700 /usr/bin/cc 
+chmod 700 /usr/bin/gcc 
+chmod 700 /usr/bin/g++ 
+chmod 700 /usr/bin/i386-redhat-linux-gcc 
+chmod 700 /usr/bin/i386-redhat-linux-c++ 
+chmod 700 /usr/bin/i386-redhat-linux-g++ 
+chmod 700 /usr/bin/perlcc 
+chmod 700 /usr/bin/yacc
+chmod 0700 /usr/bin/curl
+chmod 700 /usr/bin/*ncftp*
+
+
+
+
+################################################################################
+System Monitoring
+################################################################################
+(see server_monitoring.txt)
+
+
+
+################################################################################
+Upgrading to MySQL 4
+################################################################################
+1) Download all MySQL4 binaries
+
+2) run #> rpm -Uvh MySQL-*.rpm
+   This will update the existing MySQL install and handle dependencies.
+
+3) For PHP 4.3 compatibility (with php-mysql not compiled for MySQL4 new password hash), 
+   add the following line to /etc/my.cnf . . .
+
+   [mysqld]
+   old_passwords
+
+4) Test a PHP script to see if it can connect to the dB.  Use something like . . .
+
+<?php
+
+$link = mysql_connect('localhost', 'root', 'password');
+if (!$link) {
+   die('Could not connect: ' . mysql_error());
+}
+echo 'Connected successfully';
+mysql_close($link);
+
+?>
+
+
+5) If the above script dies with "Client does not support authentication protocol requested by server" error, 
+   update the old password with the following SQL . . .
+   SET PASSWORD FOR root@localhost = OLD_PASSWORD('password');
+
+
+
+OR
+
+Install from Source ...
+
+http://dev.mysql.com/doc/mysql/en/quick-install.html
+
+shell> groupadd mysql
+shell> useradd -g mysql mysql
+shell> gunzip < mysql-VERSION.tar.gz | tar -xvf -
+shell> cd mysql-VERSION
+shell> ./configure --prefix=/usr/local/mysql
+shell> make
+shell> make install
+shell> cp support-files/my-medium.cnf /etc/my.cnf
+shell> cd /usr/local/mysql
+shell> bin/mysql_install_db --user=mysql
+shell> chown -R root  .
+shell> chown -R mysql var
+shell> chgrp -R mysql .
+shell> bin/mysqld_safe --user=mysql &
+
+1) #> CFLAGS="-O2 -mpentiumpro" CXX=gcc CXXFLAGS="-O2 -mpentiumpro -fno-exceptions" ./configure --enable-assembler
+
+2) #> make
+
+3) #> make check
+
+4) #> make install
+
+5) #> cp support-files/mysql.server /etc/init.d/mysql
+
+6) #> update-rc.d mysql default
+      # Note: this does the same thing as enable.pl (David's script?)
+
+
+
+
+################################################################################
+Installing Hardware RAID Support
+################################################################################
+
+<<< 3Ware >>>
+
+Most likely, the driver has already been installed so this section just covers how 
+to properly install the 3dm monitoring service.
+
+1) Download 3dm from http://3ware.com/support/downloadpage.asp
+   Note: it's a good idea to grab the cli app as well for future use
+
+2) If White Box linux is installed, the install.3dm script will not properly install 
+   the init scripts.  So, modify install.3dm as follows . . .
+
+	#original
+	set distr = "untested"
+	#new
+	set distr = "redhat"
+
+3) Run install.3dm
+
+4) Make sure everything installed properly by rebooting and checking if 3dm is running 
+   via the web http://xxx.xxx.xxx.xxx:1080
+
+5) Turn off mdm and mdmonitor which are software raid monitors
+
+
+Files: 
+http://3ware.com/download/Escalade7000Series/7.7.1/3dm_linux.tgz
+http://3ware.com/download/Escalade7000Series/7.7.1/cli_linux.tgz
+
+
+
+################################################################################
+Setting Up HTTP SSL Cert
+################################################################################
+
+1) Follow steps at http://en.tldp.org/HOWTO/SSL-RedHat-HOWTO-3.html#ss3.1
+
+openssl genrsa -out filename.key 1024
+openssl req -new -key filename.key -out filename.csr
+# self-signed cert
+openssl req -new -key filename.key -x509 -out filename.crt
+
+
+2) Configure /etc/httpd/conf.d/ssl.conf SSLCertificateFile and SSLCertificateKeyFile 
+to use the cert created in step 1.
+
+
+
