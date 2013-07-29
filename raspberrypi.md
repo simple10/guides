@@ -235,6 +235,9 @@ reboot
 
 cd /data
 touch test.txt
+
+# If the drive is not umounted properly, it may require manual checking
+fsck.hfsplus -f /dev/sda2
 ```
 
 
