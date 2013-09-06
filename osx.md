@@ -8,3 +8,12 @@ qlmanage -r cache && sudo find /private/var/folders -name "thumbnails.data" -del
 ```
 
 Now restart and the icons should be back to normal high-res.
+
+
+# Terminal
+
+Reopen windows on startup
+
+    System Preferences -> General
+
+Uncheck "Close windows when quitting an application"
