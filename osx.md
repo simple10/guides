@@ -17,3 +17,9 @@ Reopen windows on startup
     System Preferences -> General
 
 Uncheck "Close windows when quitting an application"
+
+
+# Search
+
+    mdfind -name homebrew
+
