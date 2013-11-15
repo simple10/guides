@@ -9,12 +9,12 @@ When a new server is created, DigitalOcean adds the hostname to /etc/hosts.
 127.0.0.1    localhost somehostname
 ```
 
-This works great except for services that use gethostbyname(). System emails like 
+This works great except for services that use gethostbyname(). System emails like
 bad sudo password notifications will use "localhost" in the emails, making it difficult
 to figure out which server actually generated the email.
 
 To make gethostbyname() return the hostname instead of localhost, either move the hostname
-to a separate line with the public ip address or move hostname before localhost on the 
+to a separate line with the public ip address or move hostname before localhost on the
 127.0.0.1 line.
 
 ```bash
