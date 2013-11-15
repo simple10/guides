@@ -62,3 +62,15 @@ Otherwise, any server created from the snapshot will not properly boot.
 touch /.autorelabel
 ```
 
+
+## Regenerate SSH Keys
+
+Images created before July 2nd, 2013, all had the same SSH host keys which represent
+a security risk. To be safe, regenerate SSH host keys.
+
+For Debian or Ubuntu servers:
+
+1. Remove potentially duplicated host key
+  `sudo rm /etc/ssh/ssh_host_*`
+2. Regenerate host keys
+  `sudo dpkg-reconfigure openssh-server`
