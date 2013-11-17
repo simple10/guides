@@ -1,3 +1,5 @@
+http://blog.zachorr.com/nginx-setup/
+
 http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
 
 # Install the naxsi enabled version of Nginx
