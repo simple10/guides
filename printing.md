@@ -20,6 +20,7 @@
 * http://www.casetagram.com/ – custom iphone cases
 * http://www.instaprint.me/
 * http://www.canvaspop.com/photo-printing-api
+* http://gifpop.io/ – lenticular priting
 
 
 # Instagram Prints
