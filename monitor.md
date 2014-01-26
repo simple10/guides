@@ -3,7 +3,7 @@
 ```bash
 # Ubuntu or Debian
 
-sudo apt-get install htop atop iotop
+sudo apt-get install htop atop iotop nmon
 sudo apt-get install python-pip python-dev
 sudo pip install Glances
 ```
