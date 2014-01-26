@@ -51,6 +51,7 @@ ufw allow 80/tcp
 
 # Monitoring
 
+* [GoAccess](http://goaccess.prosoftcorp.com/) – `apt-get install goaccess`
 * [Stub Status Module](http://wiki.nginx.org/HttpStubStatusModule)
 * [wtop](https://github.com/ClockworkNet/wtop/wiki/Install)
 * [RRDTool Graphs](http://kovyrin.net/2006/04/29/monitoring-nginx-with-rrdtool/)
