@@ -8,6 +8,12 @@ sudo apt-get install python-pip python-dev
 sudo pip install Glances
 ```
 
+* [nmon](http://nmon.sourceforge.net/pmwiki.php)
+* [glances](https://github.com/nicolargo/glances)
+* [atop](http://www.atoptool.nl/)
+* [htop](http://hisham.hm/htop/)
+* [iotop](http://guichaz.free.fr/iotop/)
+
 
 ## Web Server
 
