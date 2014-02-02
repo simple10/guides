@@ -7,6 +7,7 @@
 
 ## Blog Posts
 
+* [Thinking in React](http://facebook.github.io/react/blog/2013/11/05/thinking-in-react.html) – good primer on workflow
 * [React vs Angular](http://skulbuny.com/2013/10/31/react-vs-angular/)
 
 
