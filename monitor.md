@@ -3,7 +3,7 @@
 ```bash
 # Ubuntu or Debian
 
-sudo apt-get install htop atop iotop nmon
+sudo apt-get install htop atop iotop nmon dstat iftop nload
 sudo apt-get install python-pip python-dev
 sudo pip install Glances
 ```
@@ -13,6 +13,9 @@ sudo pip install Glances
 * [atop](http://www.atoptool.nl/)
 * [htop](http://hisham.hm/htop/)
 * [iotop](http://guichaz.free.fr/iotop/)
+* [dstat](http://dag.wiee.rs/home-made/dstat/)
+* [iftop](http://www.ex-parrot.com/pdw/iftop/)
+* [nload](http://www.roland-riegel.de/nload/)
 
 
 ## Web Server
