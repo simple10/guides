@@ -1,7 +1,7 @@
 # Debugging
 
 * [Node Inspector](https://github.com/node-inspector/node-inspector)
-* [Built in debugger](http://nodejs.org/api/debugger.html) – `node debug scropt.js`
+* [Built in debugger](http://nodejs.org/api/debugger.html) – `node debug script.js`
 * [StackOverflow discussion](http://stackoverflow.com/questions/1911015/how-to-debug-node-js-applications)
 * [Node debugging primer](http://www.habdas.org/node-js-debugging-primer/)
 
