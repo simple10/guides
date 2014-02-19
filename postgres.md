@@ -1,3 +1,7 @@
+# Resources
+
+* [Costs of a PostgreSQL connection](http://hans.io/blog/2014/02/19/postgresql_connection/index.html)
+
 # OSX
 
 ```bash
