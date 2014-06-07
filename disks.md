@@ -27,3 +27,12 @@ mkfs.btrfs -m single /dev/sdb
 
 # Inspect
 btrfs filesystem show
+
+# Mount
+mkdir /data
+mount /dev/sdb /data
+
+# Inspect
+df -h
+```
+
