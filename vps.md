@@ -20,9 +20,14 @@ apt-get update
 apt-get upgrade
 apt-get install fail2ban
 apt-get install ufw
-apt-get install chkconfig
 apt-get install htop
 apt-get install ntp
+
+# Debian
+apt-get install chkconfig
+
+# Ubuntu
+apt-get install sysv-rc-conf
 ```
 
 ```bash
@@ -98,10 +103,13 @@ service fail2ban restart
 # See security.md guide
 
 # Remove unneeded packages and services
+# Debian
 chkconfig -l
-ps aux
-
 apt-get purge consolekit
+# Ubuntu
+sysv-rc-conf
+
+ps aux
 ```
 
 
