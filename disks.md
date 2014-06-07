@@ -1,6 +1,6 @@
 # Debian/Ubuntu
 
-How to mount external disks.
+How to mount external USB disks.
 
 [Ubuntu Guide](https://help.ubuntu.com/community/Mount/USB)
 
@@ -34,5 +34,13 @@ mount /dev/sdb /data
 
 # Inspect
 df -h
+
+# Update fstab to add new disk to auto mount on boot
+blkid
+# Copy UUID of /dev/sdb
+vim /etc/fstab
+# Add disk with UUID
+# UUID=5fde56d0-b290-428c-6a3d-6787d3705c00 /data           btrfs   defaults        0       1
+
 ```
 
