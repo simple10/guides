@@ -11,15 +11,15 @@
 #                    <...>
 ### END INIT INFO
 
-# Author: Martin Atkins <mart@degeneration.co.uk>
+# Modified from Martin Atkins' init.d script
 # https://github.com/apparentlymart/camlistore-debian/blob/master/debian/init.d
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
+PATH=/usr/local/bin:/usr/bin:/bin
 DESC=camlistore              # Introduce a short description here
 NAME=camlistore              # Introduce the short server's name here
-DAEMON=/usr/sbin/camlistored # Introduce the server's location here
-DAEMON_ARGS='-configfile=/etc/camlistore/server-config.json'
+DAEMON=/usr/local/bin/camlistored # Introduce the server's location here
+DAEMON_ARGS='-configfile=/var/lib/camlistore/.config/camlistore/server-config.json'
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
