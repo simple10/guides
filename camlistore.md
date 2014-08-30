@@ -24,6 +24,11 @@ sudo usermod -s /bin/false camlistore
 sudo curl -o /etc/init.d/camlistore https://raw.githubusercontent.com/simple10/guides/master/etc/init.d/camlistore
 sudo chmod 755 /etc/init.d/camlistore
 
+# Create log directory
+sudo mkdir -p /var/log/camlistore
+sudo chown camlistore:camlistore /var/log/camlistore
+sudo chmod 750 /var/log/camlistore
+
 # Start camlistored service
 sudo service camlistore start
 
