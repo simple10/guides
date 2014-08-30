@@ -65,7 +65,7 @@ do_stop()
 	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
 	RETVAL="$?"
 	# Clean up pidfile if daemon stopped
-	if [ "$RETVAL" = 0 ]; then
+	if [ "$RETVAL" != 2 ]; then
 	  rm -f $PIDFILE
 	fi
 	return "$RETVAL"
