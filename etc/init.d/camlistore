@@ -16,10 +16,10 @@
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
 
 DESC="camlistore server"
-NAME=camlistore
-CAMLISTORE_USER=camlistore
 
-DAEMON=/usr/local/bin/camlistored # Introduce the server's location here
+CAMLISTORE_USER=camlistore
+NAME=camlistored
+DAEMON=/usr/local/bin/camlistored
 DAEMON_ARGS='-configfile=/var/lib/camlistore/.config/camlistore/server-config.json'
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
@@ -47,7 +47,7 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --chuid $CAMLISTORE_USER --make-pidfile --pidfile $PIDFILE --name $NAME --background  \
+	start-stop-daemon --start --quiet --chuid $CAMLISTORE_USER --make-pidfile --pidfile $PIDFILE --background  \
 		--startas /bin/bash -- -c "exec $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1" \
 		|| return 2
 }
@@ -64,9 +64,8 @@ do_stop()
 	#   other if a failure occurred
 	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
 	RETVAL="$?"
-	[ "$RETVAL" = 2 ] && return 2
-	# Clean up pidfile
-	rm -f $PIDFILE
+	# Clean up pidfile if daemon stopped
+	[ "$RETVAL" = 0 ] && rm -f $PIDFILE
 	return "$RETVAL"
 }
 
