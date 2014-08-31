@@ -18,6 +18,18 @@ vi /etc/security/limits.conf
 # reboot and rerun testparm
 ```
 
+# Disable Printers
+
+```bash
+# Add to /etc/samba/smb.conf
+
+   load printers = no
+   printing = bsd
+   printcap name = /dev/null
+   show add printer wizard = no
+   disable spoolss = yes
+```
+
 # Performance Tuning
 
 - https://wiki.samba.org/index.php/Linux_Performance
