@@ -35,6 +35,8 @@ vi /etc/security/limits.conf
 - https://wiki.samba.org/index.php/Linux_Performance
 - http://www.samba.org/samba/docs/man/Samba-HOWTO-Collection/speed.html
 - http://www.eggplant.pro/blog/faster-samba-smb-cifs-share-performance/
+- enable [jumbo frames](https://wiki.archlinux.org/index.php/Jumbo_frames) on server
+- tweak osx client [delayed_ack param](https://community.emc.com/message/771176)
 
 
 ```bash
@@ -53,4 +55,15 @@ vi /etc/security/limits.conf
    strict locking = auto
 ;   max connections = 65535
 ;   max open files = 65535
+```
+
+
+# Test
+
+Test speed with rsync or pv:
+http://askubuntu.com/questions/17275/progress-and-speed-with-cp
+
+```bash
+# Example for samba "backup" folder mounted on OSX
+rsync -av --progress [SOURCE_FILE] /Volumes/backup
 ```
