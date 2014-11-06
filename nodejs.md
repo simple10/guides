@@ -5,6 +5,26 @@
 * [StackOverflow discussion](http://stackoverflow.com/questions/1911015/how-to-debug-node-js-applications)
 * [Node debugging primer](http://www.habdas.org/node-js-debugging-primer/)
 
+
+# NPM
+
+### Update module versions in package.json
+
+Use any of the below methods from [Stack Overflow](http://stackoverflow.com/questions/16073603/how-do-i-update-each-dependency-in-package-json-to-the-latest-version).
+
+```bash
+# Replace version strings with "*" then ...
+npm update --save
+
+# Update a specific package without modifying package.json
+npm install PACKAGE_NAME@* --save
+
+# Check update util
+npm install -g npm-check-updates
+npm-check-updates -u
+npm install
+```
+
 # Debian
 
 ```bash
