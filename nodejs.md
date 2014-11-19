@@ -13,7 +13,7 @@
 Use any of the below methods from [Stack Overflow](http://stackoverflow.com/questions/16073603/how-do-i-update-each-dependency-in-package-json-to-the-latest-version).
 
 ```bash
-# Replace version strings with "*" then ...
+# Replace version strings with "*", close package.json, then...
 npm update --save
 
 # Update a specific package without modifying package.json
