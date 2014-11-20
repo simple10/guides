@@ -4,7 +4,7 @@
 * [Built in debugger](http://nodejs.org/api/debugger.html) – `node debug script.js`
 * [StackOverflow discussion](http://stackoverflow.com/questions/1911015/how-to-debug-node-js-applications)
 * [Node debugging primer](http://www.habdas.org/node-js-debugging-primer/)
-
+* [Flame Graphs](http://www.brendangregg.com/blog/2014-09-17/node-flame-graphs-on-linux.html)
 
 # NPM
 
