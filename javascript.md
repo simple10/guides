@@ -3,6 +3,10 @@ Memory Management
 
 http://polar.me/blog/2013/05/anaging-memory-in-javascript-is-hard
 
+## Profiling
+
+Use the [Timeline](https://developer.chrome.com/devtools/docs/javascript-memory-profiling) view in Chrome Developer Tools to debug memory leaks.
+
 
 ## Tail Recursion
 
