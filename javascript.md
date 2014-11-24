@@ -7,6 +7,15 @@ http://polar.me/blog/2013/05/anaging-memory-in-javascript-is-hard
 
 Use the [Timeline](https://developer.chrome.com/devtools/docs/javascript-memory-profiling) view in Chrome Developer Tools to debug memory leaks.
 
+[YouTube Video](https://www.youtube.com/watch?v=0UNWi7FA36M&t=28m43s) – mobile JS apps optimizations
+- use advanced image compression like [WebP](https://developers.google.com/speed/webp/?csw=1) or tools like [ImageOptim](https://imageoptim.com/)
+- use gzip, spdy, etc. on server side
+- batch network calls to avoid mobile latency when radio turns off; also helps preserve battery
+- reduce CSS render weight
+- batch DOM manipulation
+- use static memory usage patterns
+  - preallocate objects, etc.
+
 
 ## Tail Recursion
 
