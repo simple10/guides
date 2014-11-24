@@ -1,7 +1,8 @@
 Memory Management
 =================
 
-http://polarmobile.com/blog/2013/5/managing-memory-in-javascript-is-hard
+http://polar.me/blog/2013/05/anaging-memory-in-javascript-is-hard
+
 
 ## Tail Recursion
 
