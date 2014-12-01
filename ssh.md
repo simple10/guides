@@ -3,6 +3,11 @@
 Generate a new ssh key.
 
 ```bash
+# Simple way
+ssh-keygen -t rsa -b 4096 -C "name@domain.com"
+
+# OR old way...
+
 ssh-keygen -t rsa -C "yourname@yourdomain.ext"
 
 # Make the key much stronger
