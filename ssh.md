@@ -1,5 +1,8 @@
 # Client
 
+# Exit a stuck ssh or terminal session
+`~.ENTER`
+
 Generate a new ssh key.
 
 ```bash
