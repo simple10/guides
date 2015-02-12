@@ -2,29 +2,29 @@ Tools and services for load testing websites and APIs.
 
 ## Tools
 
-### Apache Bench (ab)
+#### Apache Bench (ab)
 
 [apache.org](http://httpd.apache.org/docs/2.4/programs/ab.html) - popular http benchmarking tool
 
 
-### Siege
+#### Siege
 
 [joedog.org](http://www.joedog.org/siege-home/) - http benchmarking tool
 
-### Vegeta
+#### Vegeta
 
 [github.com](https://github.com/tsenart/vegeta) - load testing tool written in go
 
-### Bees with Machine Guns
+#### Bees with Machine Guns
 
 [github.com](https://github.com/newsapps/beeswithmachineguns) - creates swarm of EC2 instances to load test web applications
 
-### Google Page Speed
+#### Google Page Speed
 
 [google.com](https://developers.google.com/speed/pagespeed/) - tool for determining and analyzing page load times
 
 
-### httperf
+#### httperf
 
 [hp.com](http://www.hpl.hp.com/research/linux/httperf/) - tool for measuring web server performance
 
@@ -32,15 +32,15 @@ Tools and services for load testing websites and APIs.
 
 ## Services
 
-### Loader.io
+#### Loader.io
 
 [loader.io](http://loader.io/) - free load testing service
 
-### Load Impact
+#### Load Impact
 
 [loadimpact.com](http://loadimpact.com/) - automated performace testing
 
-### Blitz
+#### Blitz
 
 [blitz.io](https://www.blitz.io/) - automated performace testing
 
