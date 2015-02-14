@@ -1,5 +1,7 @@
 https://t37.net/nginx-optimization-understanding-sendfile-tcp_nodelay-and-tcp_nopush.html
 
+[Nginx in Docker](https://news.ycombinator.com/item?id=9045125) - issues with sendfile in shared file system
+
 http://blog.zachorr.com/nginx-setup/
 
 http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
