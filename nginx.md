@@ -1,3 +1,5 @@
+https://t37.net/nginx-optimization-understanding-sendfile-tcp_nodelay-and-tcp_nopush.html
+
 http://blog.zachorr.com/nginx-setup/
 
 http://www.cyberciti.biz/tips/linux-unix-bsd-nginx-webserver-security.html
