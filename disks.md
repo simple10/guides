@@ -15,9 +15,16 @@ mkdir /data
 # See guide
 ```
 
-## Formatting Disk
+# BTRFS
 
-[BTRFS](http://www.howtoforge.com/a-beginners-guide-to-btrfs)
+- [BTRFS](http://www.howtoforge.com/a-beginners-guide-to-btrfs)
+- [Why use btrfs?](https://www.youtube.com/watch?v=6DplcPrQjvA) - Jan 2015 talk from Google engineer
+  - licensing + better memory usage on linux
+  - use kernel 3.14.x, avoid 3.15-3.16.1 (9:30 in video)
+  - always have backups, possibility of corruption
+  - file encryption not yet supported, can use dm-crypt
+  - dedup is available via experimental userland tool
+
 
 ```bash
 apt-get install btrfs-tools
@@ -38,7 +45,10 @@ df -h
 # Update fstab to add new disk to auto mount on boot
 blkid
 # Copy UUID of /dev/sdb
+
 vim /etc/fstab
+# OR vifs if available
+
 # Add disk with UUID
 # UUID=5fde56d0-b290-428c-6a3d-6787d3705c00 /data           btrfs   defaults        0       1
 
