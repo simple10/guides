@@ -20,7 +20,8 @@ mkdir /data
 - [BTRFS](http://www.howtoforge.com/a-beginners-guide-to-btrfs)
 - [Why use btrfs?](https://www.youtube.com/watch?v=6DplcPrQjvA) - Jan 2015 talk from Google engineer
   - licensing + better memory usage on linux
-  - use kernel 3.14.x, avoid 3.15-3.16.1 (9:30 in video)
+  - use kernel [3.14.x](http://kernel.ubuntu.com/~kernel-ppa/mainline/v3.14.1-trusty/), avoid 3.15-3.16.1 (9:30 in video)
+    - download deb packages for headers and image, then `dpkg -i *.deb`
   - always have backups, possibility of corruption
   - file encryption not yet supported, can use dm-crypt
   - dedup is available via experimental userland tool
